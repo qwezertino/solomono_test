@@ -1,13 +1,13 @@
 $(document).ready(function() {
-    // Handle category link click
     $('.category-link').on('click', function(event) {
         event.preventDefault();
+        $('.category-link').removeClass('active');
+        $(this).addClass('active');
         const categoryId = $(this).data('id');
-        fetchProducts(categoryId);
+        fetchProducts(categoryId, $('#sort-select').val());
         updateURL(categoryId, $('#sort-select').val());
     });
 
-    // Handle sort select change
     $('#sort-select').on('change', function() {
         const categoryId = $('.category-link.active').data('id') || '';
         const orderBy = $(this).val();
@@ -15,10 +15,9 @@ $(document).ready(function() {
         updateURL(categoryId, orderBy);
     });
 
-    // Fetch products based on category and sorting
     function fetchProducts(categoryId = '', orderBy = 'price') {
         $.ajax({
-            url: '/products/getProducts',
+            url: '/products/fetch-products',
             type: 'GET',
             data: { category: categoryId, order: orderBy },
             success: function(data) {
@@ -31,7 +30,7 @@ $(document).ready(function() {
                             <div class="card-body">
                                 <h5 class="card-title">${product.name}</h5>
                                 <p class="card-text">${product.price} USD</p>
-                                <button class="btn btn-primary buy-btn" data-id="${product.id}">Buy</button>
+                                <button class="btn btn-primary btn-buy" data-id="${product.id}">Buy</button>
                             </div>
                         </div>`;
                     $productList.append(productCard);
@@ -40,11 +39,10 @@ $(document).ready(function() {
         });
     }
 
-    // Handle buy button click
-    $('#product-list').on('click', '.buy-btn', function() {
+    $('#product-list').on('click', '.btn-buy', function() {
         const productId = $(this).data('id');
         $.ajax({
-            url: '/products/getProduct',
+            url: '/products/fetch-product',
             type: 'GET',
             data: { id: productId },
             success: function(data) {
@@ -55,7 +53,6 @@ $(document).ready(function() {
         });
     });
 
-    // Update URL with category and sorting parameters
     function updateURL(categoryId = '', orderBy = 'price') {
         const url = new URL(window.location.href);
         if (categoryId) {
@@ -67,7 +64,6 @@ $(document).ready(function() {
         window.history.pushState({}, '', url);
     }
 
-    // On page load, fetch products based on URL parameters
     const urlParams = new URLSearchParams(window.location.search);
     const categoryId = urlParams.get('category') || '';
     const orderBy = urlParams.get('order') || 'price';
@@ -76,4 +72,17 @@ $(document).ready(function() {
     }
     $('#sort-select').val(orderBy);
     fetchProducts(categoryId, orderBy);
+
+    $('.tree li').each(function() {
+        if ($(this).children('ul').length > 0) {
+            $(this).addClass('parent');
+            $(this).children('ul').hide();
+        }
+    });
+
+    $('.tree li.parent').click(function(e) {
+        e.stopPropagation();
+        $(this).children('ul').toggle();
+        $(this).toggleClass('open');
+    });
 });

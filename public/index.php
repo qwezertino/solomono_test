@@ -20,7 +20,9 @@ $app = new Application(dirname(__DIR__), $config);
 
 $app->router->get('/', [SiteController::class, 'home']);
 $app->router->get('/products', [ProductController::class, 'index']);
-$app->router->get('/products/getProducts', [ProductController::class, 'getProducts']);
-$app->router->get('/products/getProduct', [ProductController::class, 'getProduct']);
+$app->router->get('/products/fetch-products', [ProductController::class, 'fetchProducts']);
+$app->router->get('/products/fetch-product', [ProductController::class, 'fetchProduct']);
+$app->router->get('/test', [SiteController::class, 'test']);
+$app->router->get('/test2', [SiteController::class, 'test2']);
 
 $app->run();

@@ -1,0 +1,33 @@
+.category-link {
+    display: block;
+    padding: 8px 16px;
+    text-decoration: none;
+    color: #007bff;
+}
+
+.category-link.active {
+    background-color: #007bff;
+    color: white;
+}
+
+.category-link .badge {
+    background-color: #007bff;
+    color: white;
+}
+
+.tree ul {
+    list-style-type: none;
+}
+.tree li {
+    margin-left: 1em;
+    line-height: 1.5em;
+    position: relative; /* Needed for absolute positioning of arrows */
+}
+.tree li > .arrow {
+    position: absolute;
+    left: -1em; /* Adjust as necessary for positioning */
+    cursor: pointer;
+}
+.tree li > .arrow:hover {
+    color: blue; /* Example: Change color on hover */
+}

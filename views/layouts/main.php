@@ -8,7 +8,8 @@
     <!-- Bootstrap CSS -->
     <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.0/css/bootstrap.min.css"
           integrity="sha384-9aIt2nRpC12Uk9gS9baDl411NQApFmC26EwAOH8WgZl5MYYxFfc+NcPb1dKGj7Sk" crossorigin="anonymous">
-
+    <!-- add style.css -->
+    <link rel="stylesheet" href="/css/style.css">
     <title><?php echo $this->title ?></title>
 </head>
 <body>
@@ -26,6 +27,10 @@
             </li>
             <li class="nav-item">
                 <a class="nav-link" href="/products">Products</a>
+            </li><li class="nav-item">
+                <a class="nav-link" href="/test">Categories Tree (using DB recursive)</a>
+            </li><li class="nav-item">
+                <a class="nav-link" href="/test2">Categories Tree (using PHP array funct)</a>
             </li>
         </ul>
     </div>
@@ -39,26 +44,6 @@
         </div>
     <?php endif; ?>
     {{content}}
-</div>
-
-
-<div class="modal fade" id="productModal" tabindex="-1" aria-labelledby="productModalLabel" aria-hidden="true">
-    <div class="modal-dialog">
-        <div class="modal-content">
-            <div class="modal-header">
-                <h5 class="modal-title" id="productModalLabel">Product Details</h5>
-                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                    <span aria-hidden="true">&times;</span>
-                </button>
-            </div>
-            <div class="modal-body">
-                <!-- Product details will be loaded here via AJAX -->
-            </div>
-            <div class="modal-footer">
-                <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
-            </div>
-        </div>
-    </div>
 </div>
 
 <!-- Optional JavaScript -->

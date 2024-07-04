@@ -21,17 +21,38 @@ class Product extends DbModel
         return ['name', 'price', 'created_at', 'category_id'];
     }
 
-    public static function getAll($categoryId = null, $orderBy = 'price')
+    public static function findAllWithFilters($filters)
     {
-        $sql = "SELECT * FROM products";
-        if ($categoryId) {
-            $sql .= " WHERE category_id = :category_id";
+
+        $sql = "SELECT * FROM " . static::tableName() . " WHERE 1";
+
+        if (isset($filters['category']) && $filters['category'] !== '') {
+            $sql .= " AND category_id = :category_id";
         }
-        $sql .= " ORDER BY $orderBy";
+
+        if (isset($filters['order'])) {
+            switch ($filters['order']) {
+                case 'price_asc':
+                    $sql .= " ORDER BY price ASC";
+                    break;
+                case 'price_desc':
+                    $sql .= " ORDER BY price DESC";
+                    break;
+                case 'name':
+                    $sql .= " ORDER BY name ASC";
+                    break;
+                case 'newest':
+                    $sql .= " ORDER BY created_at DESC";
+                    break;
+            }
+        }
+
         $statement = self::prepare($sql);
-        if ($categoryId) {
-            $statement->bindValue(':category_id', $categoryId);
+
+        if (isset($filters['category']) && $filters['category'] !== '') {
+            $statement->bindValue(':category_id', $filters['category']);
         }
+
         $statement->execute();
         return $statement->fetchAll(\PDO::FETCH_ASSOC);
     }

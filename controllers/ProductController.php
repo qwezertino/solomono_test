@@ -12,19 +12,20 @@ class ProductController extends Controller
 {
     public function index(Request $request, Response $response)
     {
-        $queryParams = $request->getBody();
-        $categoryId = $queryParams['category'] ?? null;
-        $orderBy = $queryParams['order'] ?? 'price';
         $categories = Category::getAllWithProductCount();
-        $products = Product::getAll($categoryId, $orderBy);
+
+        $filters = $request->getBody();
+        $products = Product::findAllWithFilters($filters);
 
         return $this->render('products', [
             'categories' => $categories,
-            'products' => $products
+            'products' => $products,
+            'selectedCategory' => $filters['category'] ?? null,
+            'selectedOrder' => $filters['order'] ?? 'price',
         ]);
     }
 
-    public function getProduct(Request $request, Response $response)
+    public function fetchProduct(Request $request)
     {
         $queryParams = $request->getBody();
         $id = $queryParams['id'];
@@ -32,16 +33,11 @@ class ProductController extends Controller
         header('Content-Type: application/json');
         echo json_encode($product);
     }
-    public function getProducts(Request $request, Response $response)
+
+    public function fetchProducts(Request $request)
     {
-        $queryParams = $request->getBody();
-        $categoryId = $queryParams['category'] ?? null;
-        $orderBy = $queryParams['order'] ?? 'price';
-        $products = Product::getAll($categoryId, $orderBy);
+        $products = Product::findAllWithFilters($request->getBody());
         header('Content-Type: application/json');
         echo json_encode(['products' => $products]);
-        return;
     }
 }
-
-
